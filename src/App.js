@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchMenuItems } from './services/api';
 import CartModal from './components/CartModal';
 import AdminDashboard from './components/AdminDashboard';
+import AuthModal from './components/AuthModal';
 import './App.css';
 
 function App() {
@@ -16,7 +17,17 @@ function App() {
   // View switcher state: 'store' or 'admin'
   const [viewMode, setViewMode] = useState('store');
 
+  // User Authentication State
+  const [user, setUser] = useState(null);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
   useEffect(() => {
+    // Check if user is already logged in from previous session
+    const storedUser = localStorage.getItem('userInfo');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
     fetchMenuItems()
       .then((response) => {
         setMenuItems(response.data);
@@ -28,6 +39,20 @@ function App() {
         setLoading(false);
       });
   }, []);
+
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    setMessage(`Welcome back, ${userData.name}!`);
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('userInfo');
+    setUser(null);
+    setViewMode('store'); // Reset to storefront on logout
+    setMessage('Logged out successfully.');
+    setTimeout(() => setMessage(null), 3000);
+  };
 
   // Add to cart handler
   const addToCart = (item) => {
@@ -98,7 +123,14 @@ function App() {
             Storefront
           </button>
           <button 
-            onClick={() => setViewMode('admin')}
+            onClick={() => {
+              if (user && user.role === 'admin') {
+                setViewMode('admin');
+              } else {
+                alert('Access Denied. You must be logged in as an admin to view this dashboard.');
+                setIsAuthModalOpen(true);
+              }
+            }}
             style={{ 
               backgroundColor: viewMode === 'admin' ? '#2ecc71' : 'transparent', 
               color: 'white', border: '1px solid white', padding: '6px 12px', borderRadius: '4px', 
@@ -109,19 +141,44 @@ function App() {
           </button>
         </div>
 
-        {/* Clickable Cart Badge (Only show on Storefront) */}
-        {viewMode === 'store' && (
-          <div 
-            onClick={() => setIsCartOpen(true)}
-            style={{ 
-              position: 'absolute', top: '20px', right: '20px', 
-              backgroundColor: '#2ecc71', padding: '8px 15px', borderRadius: '20px', 
-              fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' 
-            }}
-          >
-            🛒 Cart: {cart.reduce((total, item) => total + item.quantity, 0)}
-          </div>
-        )}
+        {/* Right Header: User Account Section & Cart Badge */}
+        <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '15px' }}>
+          {/* User Auth Section */}
+          {user ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: 'rgba(255,255,255,0.1)', padding: '5px 12px', borderRadius: '20px' }}>
+              <span style={{ fontSize: '13px' }}>Hi, <strong>{user.name}</strong></span>
+              {user.role === 'admin' && (
+                <span style={{ backgroundColor: '#0ea5e9', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>Admin</span>
+              )}
+              <button 
+                onClick={handleLogout}
+                style={{ backgroundColor: '#ef4444', color: 'white', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setIsAuthModalOpen(true)}
+              style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}
+            >
+              Login / Sign Up
+            </button>
+          )}
+
+          {/* Clickable Cart Badge (Only show on Storefront) */}
+          {viewMode === 'store' && (
+            <div 
+              onClick={() => setIsCartOpen(true)}
+              style={{ 
+                backgroundColor: '#2ecc71', padding: '8px 15px', borderRadius: '20px', 
+                fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' 
+              }}
+            >
+              🛒 Cart: {cart.reduce((total, item) => total + item.quantity, 0)}
+            </div>
+          )}
+        </div>
       </header>
 
       {/* Cart Modal Drawer */}
@@ -134,6 +191,13 @@ function App() {
         onOrderSuccess={clearCart}
       />
 
+      {/* Auth Modal Component */}
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+        onLoginSuccess={handleLoginSuccess} 
+      />
+
       {/* Floating Success Notification */}
       {message && (
         <div style={{ position: 'fixed', bottom: '20px', right: '20px', backgroundColor: '#2ecc71', color: 'white', padding: '12px 20px', borderRadius: '6px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', zIndex: 1000, fontWeight: 'bold' }}>
@@ -141,11 +205,17 @@ function App() {
         </div>
       )}
 
-      {/* Conditional View Rendering */}
-      {viewMode === 'admin' ? (
+      {/* Conditional View Rendering with Security Check */}
+      {viewMode === 'admin' && user && user.role === 'admin' ? (
         <AdminDashboard />
       ) : (
         <main style={{ maxWidth: '1200px', margin: '30px auto', padding: '0 20px' }}>
+          {viewMode === 'admin' && (
+            <div style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '15px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center', fontWeight: 'bold' }}>
+              ⚠️ Admin access required. Please log in with an administrator account to view the dashboard.
+            </div>
+          )}
+
           <h2 style={{ borderBottom: '2px solid #0e0954', paddingBottom: '10px', color: '#333' }}>Our Live Menu</h2>
 
           {/* Category Filter Buttons */}

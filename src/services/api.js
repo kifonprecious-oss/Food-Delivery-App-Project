@@ -22,4 +22,8 @@ export const createOrder = (orderData) => API.post('/orders', orderData);
 export const loginUser = (formData) => API.post('/auth/login', formData);
 export const registerUser = (formData) => API.post('/auth/register', formData);
 
+// --- Admin User Management API Calls ---
+export const fetchAllUsers = () => API.get('/auth/users');
+export const updateUserRole = (userId, newRole) => API.put(`/auth/users/${userId}/role`, { role: newRole });
+
 export default API;
