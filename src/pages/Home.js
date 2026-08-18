@@ -4,169 +4,149 @@ import { useCart } from '../context/CartContext';
 
 export default function Home() {
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Fast Food');
+  const [selectedCategory, setSelectedCategory] = useState('Local Dishes');
   const { addToCart } = useCart();
 
   const categories = [
-    'Fast Food', 'Thalis', 'Desserts', 'Biryani', 
-    'Cold Drinks', 'South Indian', 'North Indian', 
-    'Chinese', 'Snacks', 'Beverages', 'Shakes'
+    'Local Dishes', 'Grills & Soya', 'Rice Dishes', 
+    'Soups', 'Snacks & Breakfast'
   ];
 
-  const filteredItems = menuItems.filter(item => {
-    return item.name.toLowerCase().includes(search.toLowerCase());
-  });
+  const filteredItems = menuItems.filter(item => 
+    item.name.toLowerCase().includes(search.toLowerCase()) &&
+    (selectedCategory === 'All' || item.category === selectedCategory)
+  );
 
   return (
-    <div className="app-container">
+    <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif', color: '#1F2937', margin: 0, padding: 0, overflowX: 'hidden' }}>
       
-      {/* Top Header Navbar */}
-      <header className="navbar">
-        <div className="nav-logo">CLOUD CHEF</div>
-        <ul className="nav-links">
-          <li><a href="/" className="active">Home</a></li>
-          <li><a href="#menu">Menu</a></li>
-          <li><a href="#about">About</a></li>
-        </ul>
-        <div className="nav-buttons">
-          <button className="btn-outline">Contact Us</button>
-          <a href="/cart" className="btn-solid">Order Now</a>
+      {/* Navbar */}
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#FFFFFF', padding: '16px 5%', borderBottom: '1px solid #E5E7EB', position: 'sticky', top: 0, zIndex: 1000, boxShadow: '0 2px 4px rgba(0,0,0,0.02)', flexWrap: 'wrap', gap: '15px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '20px' }}>🍲</span>
+          <span style={{ fontWeight: 900, fontSize: '18px', color: '#1E3A8A', letterSpacing: '0.5px' }}>SPLASHY BITES</span>
         </div>
-      </header>
+        <div style={{ display: 'flex', gap: '25px', fontWeight: 600, fontSize: '14px', color: '#4B5563' }}>
+          <a href="/" style={{ color: '#1E3A8A', textDecoration: 'none', borderBottom: '2px solid #1E3A8A', paddingBottom: '4px' }}>Home</a>
+          <a href="#menu" style={{ color: 'inherit', textDecoration: 'none' }}>Menu</a>
+          <a href="#about" style={{ color: 'inherit', textDecoration: 'none' }}>About</a>
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button style={{ border: '1px solid #1E3A8A', color: '#1E3A8A', background: 'transparent', padding: '8px 16px', fontSize: '11px', fontWeight: 700, borderRadius: '8px', cursor: 'pointer', textTransform: 'uppercase' }}>Contact Us</button>
+          <a href="/cart" style={{ background: '#1E3A8A', color: '#FFFFFF', textDecoration: 'none', padding: '9px 18px', fontSize: '11px', fontWeight: 700, borderRadius: '8px', textTransform: 'uppercase', display: 'inline-block' }}>Order Now</a>
+        </div>
+      </nav>
 
-      {/* Hero Banner */}
-      <section className="hero-section">
-        <h2>Our Menu</h2>
-        <p>Explore our wide range of freshly prepared dishes, cooked hygienically using quality ingredients and delivered hot to your doorstep.</p>
-        <a href="#menu" className="btn-solid" style={{display: 'inline-block'}}>Our Best Sellers</a>
-      </section>
+      {/* Hero Header Banner */}
+      <div style={{ background: '#1A1A1A', color: '#FFFFFF', textAlign: 'center', padding: '50px 20px', backgroundImage: 'radial-gradient(circle at center, #2A2A2A 0%, #111 100%)' }}>
+        <h2 style={{ color: '#F59E0B', fontSize: '28px', fontWeight: 800, margin: '0 0 10px 0' }}>Authentic Cameroonian Kitchen</h2>
+        <p style={{ color: '#9CA3AF', fontSize: '14px', maxWidth: '550px', margin: '0 auto 25px auto', lineHeight: '1.6' }}>Savor our rich local heritage dishes prepared with authentic spices and delivered hot to your doorstep.</p>
+        <a href="#menu" style={{ background: '#F59E0B', color: '#111', padding: '12px 28px', fontSize: '12px', fontWeight: 800, textTransform: 'uppercase', borderRadius: '8px', textDecoration: 'none', display: 'inline-block', boxShadow: '0 4px 12px rgba(245,158,11,0.3)' }}>Explore Menu</a>
+      </div>
 
-      {/* Main Container */}
-      <main className="main-content">
+      {/* Main Container Layout */}
+      <div style={{ width: '92%', maxWidth: '1200px', margin: '0 auto', padding: '30px 0' }}>
         
-        {/* Offers & Discounts */}
-        <section style={{marginBottom: '40px'}}>
-          <h3 className="section-title">Offers & Discounts</h3>
-          <div className="offers-grid">
-            <div className="offer-card">
-              <div>
-                <span className="offer-badge">Buy 1 Get 1 Free</span>
-                <h4>Veg Loaded Pizza</h4>
-                <button onClick={() => addToCart(menuItems[0])} className="btn-solid" style={{marginTop: '10px'}}>Order Now</button>
-              </div>
-              <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=300" alt="Pizza" />
-            </div>
-
-            <div className="offer-card">
-              <div>
-                <span className="offer-badge">15% Discounts</span>
-                <h4>Double Cheese Burger</h4>
-                <button onClick={() => addToCart(menuItems[2])} className="btn-solid" style={{marginTop: '10px'}}>Order Now</button>
-              </div>
-              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300" alt="Burger" />
-            </div>
-          </div>
-        </section>
-
-        {/* Best Sellers Section */}
-        <section id="menu" style={{marginBottom: '40px'}}>
-          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px'}}>
-            <h3 className="section-title" style={{margin: 0}}>Best Sellers</h3>
-            <div style={{display: 'flex', gap: '6px'}}>
-              <button style={{width: '30px', height: '30px', borderRadius: '8px', border: '1px solid #D1D5DB', background: '#fff', cursor: 'pointer'}}>&lsaquo;</button>
-              <button style={{width: '30px', height: '30px', borderRadius: '8px', border: 'none', background: '#1E3A8A', color: '#fff', cursor: 'pointer'}}>&rsaquo;</button>
-            </div>
+        {/* Categories Bar & Search Section */}
+        <div id="menu" style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: 800, color: '#111827', margin: 0 }}>Our Menu Categories</h3>
+            <input 
+              type="text" 
+              placeholder="Search dishes (e.g. Ekwang, Fufu, Soya)..." 
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              style={{ width: '100%', maxWidth: '320px', padding: '12px 18px', borderRadius: '10px', border: '1px solid #D1D5DB', fontSize: '13px', outline: 'none', background: '#FFFFFF' }}
+            />
           </div>
 
-          <div className="bestsellers-grid">
-            {menuItems.slice(0, 4).map(item => (
-              <div key={item.id} className="food-card">
-                <div>
-                  <img src={item.image} alt={item.name} />
-                  <h5>{item.name}</h5>
-                  <p>{item.description}</p>
-                </div>
-                <div className="card-footer">
-                  <span className="price-tag">₹{item.price}/-</span>
-                  <button onClick={() => addToCart(item)} className="btn-solid" style={{padding: '6px 12px', fontSize: '10px'}}>Order Now</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Categories Sidebar + Menu Items Grid Box */}
-        <div className="dashboard-box">
-          <div className="sidebar">
-            <h3 className="section-title" style={{marginBottom: '15px'}}>Menu Categories</h3>
+          {/* Category Filter Pills */}
+          <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '10px' }}>
+            <button
+              onClick={() => setSelectedCategory('All')}
+              style={{
+                background: selectedCategory === 'All' ? '#1E3A8A' : '#FFFFFF',
+                color: selectedCategory === 'All' ? '#FFFFFF' : '#4B5563',
+                border: '1px solid #E5E7EB',
+                padding: '10px 18px',
+                fontSize: '12px',
+                fontWeight: 700,
+                borderRadius: '20px',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+              }}
+            >
+              All Dishes
+            </button>
             {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`sidebar-btn ${selectedCategory === cat ? 'active' : ''}`}
+                style={{
+                  background: selectedCategory === cat ? '#1E3A8A' : '#FFFFFF',
+                  color: selectedCategory === cat ? '#FFFFFF' : '#4B5563',
+                  border: '1px solid #E5E7EB',
+                  padding: '10px 18px',
+                  fontSize: '12px',
+                  fontWeight: 700,
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap',
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
+                }}
               >
-                <span>{cat}</span>
-                <span>&rsaquo;</span>
+                {cat}
               </button>
             ))}
           </div>
-
-          <div className="menu-grid-area">
-            <input 
-              type="text" 
-              placeholder="Search menu items..." 
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
-
-            <div className="items-grid-3">
-              {filteredItems.map(item => (
-                <div key={item.id} className="food-card">
-                  <div>
-                    <img src={item.image} alt={item.name} style={{height: '110px'}} />
-                    <h5>{item.name}</h5>
-                    <p>{item.description}</p>
-                  </div>
-                  <div className="card-footer">
-                    <span className="price-tag">₹{item.price}/-</span>
-                    <button onClick={() => addToCart(item)} className="btn-solid" style={{padding: '6px 12px', fontSize: '10px'}}>Order Now</button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
-      </main>
+        {/* Responsive Grid Layout for Menu Items */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '24px', marginBottom: '60px' }}>
+          {filteredItems.map(item => (
+            <div key={item.id} style={{ background: '#FFFFFF', borderRadius: '16px', padding: '14px', border: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 12px rgba(0,0,0,0.03)', transition: 'transform 0.2s' }}>
+              <div>
+                <div style={{ width: '100%', height: '160px', borderRadius: '12px', overflow: 'hidden', marginBottom: '12px', background: '#F3F4F6' }}>
+                  <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400'; }}
+                  />
+                </div>
+                <h5 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 6px 0' }}>{item.name}</h5>
+                <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 16px 0', lineHeight: '1.4' }}>{item.description}</p>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #F3F4F6', paddingTop: '12px' }}>
+                <span style={{ fontWeight: 900, color: '#1E3A8A', fontSize: '14px' }}>{item.price.toLocaleString()} FCFA</span>
+                <button onClick={() => addToCart(item)} style={{ background: '#1E3A8A', color: '#FFFFFF', border: 'none', padding: '8px 14px', borderRadius: '8px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}>Order Now</button>
+              </div>
+            </div>
+          ))}
+        </div>
+
+      </div>
 
       {/* Footer */}
-      <footer className="footer">
+      <footer style={{ background: '#FFFFFF', borderTop: '1px solid #E5E7EB', padding: '40px 5%', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', fontSize: '12px', color: '#6B7280' }}>
         <div>
-          <div style={{fontWeight: '900', color: '#1E3A8A', fontSize: '15px', marginBottom: '8px'}}>CLOUD CHEF</div>
-          <p style={{lineHeight: '1.5'}}>Delivering quality meals straight to your doorstep with total speed and hygiene.</p>
+          <div style={{ fontWeight: '900', color: '#1E3A8A', fontSize: '16px', marginBottom: '10px' }}>SPLASHY BITES</div>
+          <p style={{ lineHeight: '1.6' }}>Bringing the finest traditional Cameroonian recipes straight to your door with unmatched taste and quality.</p>
         </div>
         <div>
-          <h6>Links</h6>
-          <ul style={{listStyle: 'none', padding: 0, margin: 0, lineHeight: '1.8'}}>
-            <li><a href="/" style={{color: 'inherit', textDecoration: 'none'}}>Home</a></li>
-            <li><a href="#menu" style={{color: 'inherit', textDecoration: 'none'}}>Menu</a></li>
-            <li><a href="#about" style={{color: 'inherit', textDecoration: 'none'}}>About</a></li>
+          <h6 style={{ fontWeight: 800, color: '#111827', fontSize: '13px', marginBottom: '14px', textTransform: 'uppercase' }}>Quick Links</h6>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, lineHeight: '2' }}>
+            <li><a href="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</a></li>
+            <li><a href="#menu" style={{ color: 'inherit', textDecoration: 'none' }}>Menu</a></li>
+            <li><a href="#about" style={{ color: 'inherit', textDecoration: 'none' }}>About Us</a></li>
           </ul>
         </div>
         <div>
-          <h6>Contact Us</h6>
-          <p style={{margin: '0 0 4px 0'}}>1901 Thornridge Cir. Shiloh, Hawaii 81063</p>
-          <p style={{margin: '0 0 4px 0'}}>(907) 555-0101</p>
-          <p style={{margin: 0}}>cloudchef@gmail.com</p>
-        </div>
-        <div>
-          <h6>Gallery</h6>
-          <div className="footer-thumbs">
-            <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100" alt="food" />
-            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=100" alt="food" />
-            <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100" alt="food" />
-          </div>
+          <h6 style={{ fontWeight: 800, color: '#111827', fontSize: '13px', marginBottom: '14px', textTransform: 'uppercase' }}>Contact Us</h6>
+          <p style={{ margin: '0 0 6px 0' }}>Molyko, Buea, Cameroon</p>
+          <p style={{ margin: '0 0 6px 0' }}>(+237) 653 80 14 78/ 681 88 10 91</p>
+          <p style={{ margin: 0 }}>kifonpreciouss@gmail.com</p>
         </div>
       </footer>
 

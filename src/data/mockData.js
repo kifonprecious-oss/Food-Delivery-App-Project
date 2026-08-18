@@ -1,39 +1,137 @@
-export const restaurants = [
-    {
-    id: '1',
-    name: 'Sha\'s Kitchen',
-    cuisine: 'Local & Continental',
-    rating: 4.8,
-    deliveryTime: '25-35 min',
-    image: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=500'
-    },
-    {
-    id: '2',
-    name: 'Billionz Fast Food',
-    cuisine: 'Fast Food',
-    rating: 4.6,
-    deliveryTime: '15-25 min',
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500'
-    }
-];
-
 export const menuItems = [
-    {
-    id: 'm1',
-    restaurantId: '1',
-    name: 'Fufu-corn and Njama Njama',
+  {
+    id: 1,
+    name: 'Braised Fish',
+    category: 'Grills & Soya',
+    price: 4500,
+    rating: 4.9,
+    description: 'Char-grilled spiced fish slathered in an aromatic onion-pepper marinade, served with fried plantains.',
+    image: '/images/braised fish.jpg'
+  },
+  {
+    id: 2,
+    name: 'Cornchaff',
+    category: 'Local Dishes',
+    price: 1800,
+    rating: 4.6,
+    description: 'A hearty, slow-cooked pot of maize and beans seasoned with rich palm oil and spices.',
+    image: '/images/cornchaff.jpg'
+  },
+  {
+    id: 3,
+    name: 'Ekwang',
+    category: 'Local Dishes',
     price: 2500,
-    category: 'Local & Continental',
-    description: 'Traditional corn fufu served with fresh huckleberry and choice of protein.',
-    image: 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26?w=500'
-    },
-    {
-    id: 'm2',
-    restaurantId: '2',
-    name: 'Cheesy Burger & Fries',
+    rating: 4.8,
+    description: 'Grated cocoyam wrapped in tender cocoyam leaves, simmered in rich palm oil sauce and smoked fish.',
+    image: '/images/Ekwang.jpg'
+  },
+  {
+    id: 4,
+    name: 'Fried Egg and Plantain',
+    category: 'Snacks & Breakfast',
+    price: 1500,
+    rating: 4.5,
+    description: 'Golden fried ripe plantain slices paired with a savory vegetable-spiced fried egg.',
+    image: '/images/fried egg and plantain.jpg'
+  },
+  {
+    id: 5,
+    name: 'Fried Rice',
+    category: 'Rice Dishes',
+    price: 2500,
+    rating: 4.6,
+    description: 'Wok-tossed rice loaded with mixed vegetables, diced liver, and spices.',
+    image: '/images/fried rice.jpg'
+  },
+  {
+    id: 6,
+    name: 'Fried Snails',
+    category: 'Grills & Soya',
     price: 3500,
-    category: 'Fast Food',
-    description: 'Juicy beef patty with extra melted cheese and crispy french fries.',
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500'
-    }
+    rating: 4.7,
+    description: 'Succulent fried land snails tossed in a fiery pepper and onion seasoning.',
+    image: '/images/fried snails.jpg'
+  },
+  {
+    id: 7,
+    name: 'Fufu and Eru',
+    category: 'Local Dishes',
+    price: 2500,
+    rating: 4.9,
+    description: 'Finely shredded eru leaves cooked with palm oil, crayfish, and smoked meat, paired with water fufu.',
+    image: '/images/fufu and eru.jpg'
+  },
+  {
+    id: 8,
+    name: 'Fufu-corn and Khati-Khati',
+    category: 'Local Dishes',
+    price: 3000,
+    rating: 4.7,
+    description: 'Steamed corn fufu served with traditional local fowl and spiced palm oil sauce.',
+    image: '/images/fufu-corn and khati-khati.jpg'
+  },
+  {
+    id: 9,
+    name: 'Irish Potatoe',
+    category: 'Local Dishes',
+    price: 2500,
+    rating: 4.5,
+    description: 'Stewed Irish potatoes cooked with fresh vegetables, rich spices, and choice meat.',
+    image: '/images/irish potatoe.jpg'
+  },
+  {
+    id: 10,
+    name: 'Ndole with Boiled Plantain',
+    category: 'Local Dishes',
+    price: 3500,
+    rating: 4.8,
+    description: 'Rich bitter leaf delicacy paired with tender boiled ripe plantains and protein.',
+    image: '/images/Ndole with boiled plantain.jpg'
+  },
+  {
+    id: 11,
+    name: 'Ndole with Plaintain',
+    category: 'Local Dishes',
+    price: 3500,
+    rating: 4.9,
+    description: 'Traditional bitter leaf delicacy cooked with groundnuts, crayfish, and tender beef, served with ripe fried plantains.',
+    image: '/images/Ndole with plaintain.jpg'
+  },
+  {
+    id: 12,
+    name: 'Pepper Soup',
+    category: 'Soups',
+    price: 2500,
+    rating: 4.7,
+    description: 'A deeply aromatic, spicy broth loaded with local spices and tender meat cuts.',
+    image: '/images/pepper soup.jpg'
+  },
+  {
+    id: 13,
+    name: 'Rice and Beans',
+    category: 'Rice Dishes',
+    price: 1800,
+    rating: 4.5,
+    description: 'Combined sweet beans and rice cooked in a savory tomato base.',
+    image: '/images/rice and beans.jpg'
+  },
+  {
+    id: 14,
+    name: 'Rice and Stew',
+    category: 'Rice Dishes',
+    price: 2000,
+    rating: 4.4,
+    description: 'Fluffy white rice served with a deeply savory tomato-pepper stew and protein.',
+    image: '/images/rice and stew.jpg'
+  },
+  {
+    id: 15,
+    name: 'Suya',
+    category: 'Grills & Soya',
+    price: 2000,
+    rating: 4.8,
+    description: 'Tender charcoal-grilled beef skewers coated in a spicy peanut and njangsa crust.',
+    image: '/images/suya.jpg'
+  }
 ];
