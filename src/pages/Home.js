@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { menuItems } from '../data/mockData';
+import React, { useState, useEffect } from 'react';
+import { fetchMenuItems } from '../api';
 import { useCart } from '../context/CartContext';
 
 export default function Home() {
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Local Dishes');
+  const [selectedCategory, setSelectedCategory] = useState('All');
   const { addToCart } = useCart();
 
   const categories = [
@@ -12,10 +15,32 @@ export default function Home() {
     'Soups', 'Snacks & Breakfast'
   ];
 
-  const filteredItems = menuItems.filter(item => 
-    item.name.toLowerCase().includes(search.toLowerCase()) &&
-    (selectedCategory === 'All' || item.category === selectedCategory)
-  );
+  useEffect(() => {
+    const loadMenu = async () => {
+      try {
+        const response = await fetchMenuItems();
+        const data = Array.isArray(response.data) 
+          ? response.data 
+          : (response.data.menu || response.data.items || []);
+        setMenuItems(data);
+        setLoading(false);
+      } catch (err) {
+        console.error('Error fetching menu items from live server:', err);
+        setError('Failed to load menu items. Make sure your Render backend is awake!');
+        setLoading(false);
+      }
+    };
+
+    loadMenu();
+  }, []);
+
+  const filteredItems = menuItems.filter(item => {
+    const itemName = item.name || '';
+    const itemCategory = item.category || 'Local Dishes';
+    const matchesSearch = itemName.toLowerCase().includes(search.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || itemCategory.toLowerCase() === selectedCategory.toLowerCase();
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div style={{ backgroundColor: '#FAF7F2', minHeight: '100vh', fontFamily: 'Inter, system-ui, sans-serif', color: '#1F2937', margin: 0, padding: 0, overflowX: 'hidden' }}>
@@ -102,29 +127,41 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Loading and Error States */}
+        {loading && <p style={{ textAlign: 'center', color: '#666', padding: '40px 0' }}>Loading live menu from server...</p>}
+        {error && <p style={{ textAlign: 'center', color: 'red', fontWeight: 'bold', padding: '40px 0' }}>{error}</p>}
+
         {/* Responsive Grid Layout for Menu Items */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '24px', marginBottom: '60px' }}>
-          {filteredItems.map(item => (
-            <div key={item.id} style={{ background: '#FFFFFF', borderRadius: '16px', padding: '14px', border: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 12px rgba(0,0,0,0.03)', transition: 'transform 0.2s' }}>
-              <div>
-                <div style={{ width: '100%', height: '160px', borderRadius: '12px', overflow: 'hidden', marginBottom: '12px', background: '#F3F4F6' }}>
-                  <img 
-                    src={item.image} 
-                    alt={item.name} 
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                    onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400'; }}
-                  />
-                </div>
-                <h5 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 6px 0' }}>{item.name}</h5>
-                <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 16px 0', lineHeight: '1.4' }}>{item.description}</p>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #F3F4F6', paddingTop: '12px' }}>
-                <span style={{ fontWeight: 900, color: '#1E3A8A', fontSize: '14px' }}>{item.price.toLocaleString()} FCFA</span>
-                <button onClick={() => addToCart(item)} style={{ background: '#1E3A8A', color: '#FFFFFF', border: 'none', padding: '8px 14px', borderRadius: '8px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}>Order Now</button>
-              </div>
+        {!loading && !error && (
+          filteredItems.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '50px 0', color: '#666' }}>
+              <p style={{ fontSize: '16px' }}>No dishes found matching your search.</p>
             </div>
-          ))}
-        </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '24px', marginBottom: '60px' }}>
+              {filteredItems.map(item => (
+                <div key={item._id || item.id} style={{ background: '#FFFFFF', borderRadius: '16px', padding: '14px', border: '1px solid #E5E7EB', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 12px rgba(0,0,0,0.03)', transition: 'transform 0.2s' }}>
+                  <div>
+                    <div style={{ width: '100%', height: '160px', borderRadius: '12px', overflow: 'hidden', marginBottom: '12px', background: '#F3F4F6' }}>
+                      <img 
+                        src={item.image} 
+                        alt={item.name} 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                        onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=400'; }}
+                      />
+                    </div>
+                    <h5 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 6px 0' }}>{item.name}</h5>
+                    <p style={{ fontSize: '12px', color: '#6B7280', margin: '0 0 16px 0', lineHeight: '1.4' }}>{item.description}</p>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #F3F4F6', paddingTop: '12px' }}>
+                    <span style={{ fontWeight: 900, color: '#1E3A8A', fontSize: '14px' }}>{(item.price || 0).toLocaleString()} FCFA</span>
+                    <button onClick={() => addToCart(item)} style={{ background: '#1E3A8A', color: '#FFFFFF', border: 'none', padding: '8px 14px', borderRadius: '8px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}>Order Now</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        )}
 
       </div>
 
