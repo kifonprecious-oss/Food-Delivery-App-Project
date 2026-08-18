@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
 
 const AdminDashboard = () => {
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const response = await axios.get('http://localhost:5000/api/orders');
       const fetchedOrders = Array.isArray(response.data) 
@@ -74,7 +74,7 @@ const AdminDashboard = () => {
       setError('Failed to load orders. Make sure your backend server is running!');
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -82,7 +82,7 @@ const AdminDashboard = () => {
       const interval = setInterval(fetchOrders, 10000);
       return () => clearInterval(interval);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, fetchOrders]);
 
   const updateStatus = async (orderId, newStatus) => {
     try {
