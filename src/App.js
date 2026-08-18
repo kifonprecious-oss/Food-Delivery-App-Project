@@ -104,80 +104,115 @@ function App() {
     : menuItems.filter((item) => item.category === selectedCategory);
 
   return (
-    <div className="App" style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f9f9f9', minHeight: '100vh', paddingBottom: '50px' }}>
-      {/* Header */}
-      <header style={{ backgroundColor: '#0e0954', color: 'white', padding: '20px', textAlign: 'center', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', position: 'relative' }}>
-        <h1 style={{ margin: 0, fontSize: 'clamp(24px, 4vw, 36px)' }}>Bites By Splashy Empire</h1>
-        <p style={{ margin: '5px 0 0', fontSize: 'clamp(14px, 2vw, 16px)' }}>Fresh, delicious meals delivered right to your doorstep!</p>
-        
-        {/* Navigation / Switcher Buttons */}
-        <div style={{ position: 'absolute', top: '20px', left: '20px', display: 'flex', gap: '10px' }}>
-          <button 
-            onClick={() => setViewMode('store')}
-            style={{ 
-              backgroundColor: viewMode === 'store' ? '#2ecc71' : 'transparent', 
-              color: 'white', border: '1px solid white', padding: '6px 12px', borderRadius: '4px', 
-              fontWeight: 'bold', fontSize: '13px', cursor: 'pointer' 
-            }}
-          >
-            Storefront
-          </button>
-          <button 
-            onClick={() => {
-              if (user && user.role === 'admin') {
-                setViewMode('admin');
-              } else {
-                alert('Access Denied. You must be logged in as an admin to view this dashboard.');
-                setIsAuthModalOpen(true);
-              }
-            }}
-            style={{ 
-              backgroundColor: viewMode === 'admin' ? '#2ecc71' : 'transparent', 
-              color: 'white', border: '1px solid white', padding: '6px 12px', borderRadius: '4px', 
-              fontWeight: 'bold', fontSize: '13px', cursor: 'pointer' 
-            }}
-          >
-            Admin Dashboard
-          </button>
+    <div className="App" style={{ 
+      fontFamily: 'Arial, sans-serif', 
+      backgroundColor: '#f9f9f9', 
+      minHeight: '100vh', 
+      width: '100vw',
+      maxWidth: '100%',
+      overflowX: 'hidden',
+      boxSizing: 'border-box',
+      paddingBottom: '50px' 
+    }}>
+      {/* Header - Fluid & Responsive Full Width */}
+      <header style={{ 
+        backgroundColor: '#0e0954', 
+        color: 'white', 
+        padding: '15px 4%', 
+        width: '100%',
+        boxSizing: 'border-box',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '15px'
+      }}>
+        {/* Top Row: Title & Subtitle */}
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ margin: 0, fontSize: 'clamp(20px, 4.5vw, 32px)' }}>Bites By Splashy Empire</h1>
+          <p style={{ margin: '5px 0 0', fontSize: 'clamp(12px, 2.5vw, 15px)', color: '#cbd5e1' }}>Fresh, delicious meals delivered right to your doorstep!</p>
         </div>
 
-        {/* Right Header: User Account Section & Cart Badge */}
-        <div style={{ position: 'absolute', top: '20px', right: '20px', display: 'flex', alignItems: 'center', gap: '15px' }}>
-          {/* User Auth Section */}
-          {user ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', backgroundColor: 'rgba(255,255,255,0.1)', padding: '5px 12px', borderRadius: '20px' }}>
-              <span style={{ fontSize: '13px' }}>Hi, <strong>{user.name}</strong></span>
-              {user.role === 'admin' && (
-                <span style={{ backgroundColor: '#0ea5e9', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>Admin</span>
-              )}
-              <button 
-                onClick={handleLogout}
-                style={{ backgroundColor: '#ef4444', color: 'white', border: 'none', padding: '4px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
+        {/* Bottom Row: Navigation and Account Actions */}
+        <div style={{ 
+          display: 'flex', 
+          flexWrap: 'wrap', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          gap: '10px',
+          borderTop: '1px solid rgba(255,255,255,0.15)',
+          paddingTop: '12px',
+          width: '100%',
+          boxSizing: 'border-box'
+        }}>
+          {/* Navigation / Switcher Buttons */}
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             <button 
-              onClick={() => setIsAuthModalOpen(true)}
-              style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}
-            >
-              Login / Sign Up
-            </button>
-          )}
-
-          {/* Clickable Cart Badge (Only show on Storefront) */}
-          {viewMode === 'store' && (
-            <div 
-              onClick={() => setIsCartOpen(true)}
+              onClick={() => setViewMode('store')}
               style={{ 
-                backgroundColor: '#2ecc71', padding: '8px 15px', borderRadius: '20px', 
-                fontWeight: 'bold', fontSize: '14px', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' 
+                backgroundColor: viewMode === 'store' ? '#2ecc71' : 'transparent', 
+                color: 'white', border: '1px solid white', padding: '6px 12px', borderRadius: '4px', 
+                fontWeight: 'bold', fontSize: '13px', cursor: 'pointer' 
               }}
             >
-              🛒 Cart: {cart.reduce((total, item) => total + item.quantity, 0)}
-            </div>
-          )}
+              Storefront
+            </button>
+            <button 
+              onClick={() => {
+                if (user && user.role === 'admin') {
+                  setViewMode('admin');
+                } else {
+                  alert('Access Denied. You must be logged in as an admin to view this dashboard.');
+                  setIsAuthModalOpen(true);
+                }
+              }}
+              style={{ 
+                backgroundColor: viewMode === 'admin' ? '#2ecc71' : 'transparent', 
+                color: 'white', border: '1px solid white', padding: '6px 12px', borderRadius: '4px', 
+                fontWeight: 'bold', fontSize: '13px', cursor: 'pointer' 
+              }}
+            >
+              Admin Dashboard
+            </button>
+          </div>
+
+          {/* User Account Section & Cart Badge */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            {/* User Auth Section */}
+            {user ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(255,255,255,0.1)', padding: '5px 10px', borderRadius: '20px' }}>
+                <span style={{ fontSize: '13px' }}>Hi, <strong>{user.name}</strong></span>
+                {user.role === 'admin' && (
+                  <span style={{ backgroundColor: '#0ea5e9', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>Admin</span>
+                )}
+                <button 
+                  onClick={handleLogout}
+                  style={{ backgroundColor: '#ef4444', color: 'white', border: 'none', padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => setIsAuthModalOpen(true)}
+                style={{ backgroundColor: '#22c55e', color: 'white', border: 'none', padding: '6px 14px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}
+              >
+                Login / Sign Up
+              </button>
+            )}
+
+            {/* Clickable Cart Badge (Only show on Storefront) */}
+            {viewMode === 'store' && (
+              <div 
+                onClick={() => setIsCartOpen(true)}
+                style={{ 
+                  backgroundColor: '#2ecc71', padding: '7px 14px', borderRadius: '20px', 
+                  fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' 
+                }}
+              >
+                🛒 Cart: {cart.reduce((total, item) => total + item.quantity, 0)}
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -209,17 +244,17 @@ function App() {
       {viewMode === 'admin' && user && user.role === 'admin' ? (
         <AdminDashboard />
       ) : (
-        <main style={{ maxWidth: '1200px', margin: '30px auto', padding: '0 20px' }}>
+        <main style={{ width: '100%', maxWidth: '1400px', margin: '20px auto', padding: '0 12px', boxSizing: 'border-box' }}>
           {viewMode === 'admin' && (
             <div style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '15px', borderRadius: '8px', marginBottom: '20px', textAlign: 'center', fontWeight: 'bold' }}>
               ⚠️ Admin access required. Please log in with an administrator account to view the dashboard.
             </div>
           )}
 
-          <h2 style={{ borderBottom: '2px solid #0e0954', paddingBottom: '10px', color: '#333' }}>Our Live Menu</h2>
+          <h2 style={{ borderBottom: '2px solid #0e0954', paddingBottom: '10px', color: '#333', margin: '0 4px 15px' }}>Our Live Menu</h2>
 
           {/* Category Filter Buttons */}
-          <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '15px', marginTop: '15px', whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', padding: '0 4px 15px', marginTop: '15px', whiteSpace: 'nowrap' }}>
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -244,7 +279,14 @@ function App() {
           {error && <p style={{ textAlign: 'center', color: 'red', fontWeight: 'bold', marginTop: '40px' }}>{error}</p>}
 
           {!loading && !error && (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '20px', marginTop: '20px' }}>
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+              gap: '20px', 
+              marginTop: '20px',
+              padding: '0 4px',
+              boxSizing: 'border-box'
+            }}>
               {filteredItems.map((item) => (
                 <div key={item._id} style={{ backgroundColor: 'white', borderRadius: '8px', overflow: 'hidden', boxShadow: '0 4px 8px rgba(0,0,0,0.05)', display: 'flex', flexDirection: 'column' }}>
                   <img 
