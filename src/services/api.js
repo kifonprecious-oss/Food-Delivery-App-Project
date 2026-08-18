@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Using relative path so the proxy handles routing to port 5000 seamlessly
+// Pointing directly to your live Render backend URL
 const API = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://food-delivery-app-project-vqx3.onrender.com/api',
 });
 
 // Automatically attach authorization token if available in localStorage
