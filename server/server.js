@@ -5,6 +5,9 @@ require('dotenv').config();
 
 const app = express();
 
+// Trust proxy settings for production deployment (Render)
+app.set('trust proxy', 1);
+
 // Middleware
 app.use(cors());
 app.use(express.json());
