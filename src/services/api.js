@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// Pointing directly to your live Render backend URL
+// Pointing directly to your live Render backend URL for public production deployment
 const API = axios.create({
   baseURL: 'https://food-delivery-app-project-vqx3.onrender.com/api',
 });

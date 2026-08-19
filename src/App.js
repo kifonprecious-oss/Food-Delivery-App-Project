@@ -22,8 +22,8 @@ function App() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
   useEffect(() => {
-    // Check if user is already logged in from previous session
-    const storedUser = localStorage.getItem('userInfo');
+    // Check if user is already logged in from previous session (synced with api.js 'userProfile')
+    const storedUser = localStorage.getItem('userProfile');
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
@@ -47,7 +47,7 @@ function App() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('userInfo');
+    localStorage.removeItem('userProfile');
     setUser(null);
     setViewMode('store'); // Reset to storefront on logout
     setMessage('Logged out successfully.');
