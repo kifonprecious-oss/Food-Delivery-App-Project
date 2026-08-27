@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import API from '../services/api';
 
 const CheckoutModal = ({ isOpen, onClose, cart, totalAmount, onOrderSuccess }) => {
   const [address, setAddress] = useState('');
@@ -33,23 +34,12 @@ const CheckoutModal = ({ isOpen, onClose, cart, totalAmount, onOrderSuccess }) =
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData)
-      });
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        alert('Order placed successfully!');
-        onOrderSuccess(); // Clears cart and closes modals
-      } else {
-        alert('Failed to place order: ' + (data.message || 'Unknown error'));
-      }
+      await API.post('/orders', orderData);
+      alert('Order placed successfully!');
+      onOrderSuccess(); // Clears cart and closes modals
     } catch (err) {
       console.error('Checkout error:', err);
-      alert('Network error. Make sure your backend server is running.');
+      alert('Failed to place order: ' + (err.response?.data?.message || 'Network error. Make sure your backend server is running.'));
     } finally {
       setLoading(false);
     }

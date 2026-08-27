@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { loginUser, registerUser } from '../services/api';
 
 const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -19,12 +19,13 @@ const AuthModal = ({ isOpen, onClose, onLoginSuccess }) => {
     setLoading(true);
 
     try {
-      const endpoint = isLoginMode ? 'http://localhost:5000/api/auth/login' : 'http://localhost:5000/api/auth/register';
       const payload = isLoginMode 
         ? { email, password } 
         : { name, email, password, phone, address };
 
-      const response = await axios.post(endpoint, payload);
+      const response = isLoginMode
+        ? await loginUser(payload)
+        : await registerUser(payload);
       
       // Save user session in localStorage
       localStorage.setItem('userInfo', JSON.stringify(response.data));

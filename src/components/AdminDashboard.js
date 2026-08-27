@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
-import axios from 'axios';
+import API from '../services/api';
 
 const AdminDashboard = () => {
   // Authentication State
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
 
   const fetchOrders = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/orders');
+      const response = await API.get('/orders');
       const fetchedOrders = Array.isArray(response.data) 
         ? response.data 
         : (response.data.orders || []);
@@ -86,7 +86,7 @@ const AdminDashboard = () => {
 
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:5000/api/orders/${orderId}/status`, { status: newStatus });
+      await API.put(`/orders/${orderId}/status`, { status: newStatus });
       setOrders((prevOrders) =>
         prevOrders.map((ord) => (ord._id === orderId ? { ...ord, status: newStatus } : ord))
       );
@@ -100,7 +100,7 @@ const AdminDashboard = () => {
   const deleteOrder = async (orderId) => {
     if (!window.confirm('Are you sure you want to delete this order?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/orders/${orderId}`);
+      await API.delete(`/orders/${orderId}`);
       setOrders((prevOrders) => prevOrders.filter((ord) => ord._id !== orderId));
       prevOrdersCountRef.current = prevOrdersCountRef.current - 1;
     } catch (err) {
