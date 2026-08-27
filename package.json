@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server/server.js",
-    "build": "npm install --prefix foodapp && npm run build --prefix foodapp"
+    "build": "react-scripts build"
   },
   "dependencies": {
     "cors": "^2.8.5",
