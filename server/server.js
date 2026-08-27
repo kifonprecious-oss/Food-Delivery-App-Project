@@ -30,11 +30,11 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/auth', authRoutes);
 
-// 3. Serve React Frontend in Production (Using 'build' for Create React App)
-app.use(express.static(path.join(__dirname, '../frontend/build')));
+// 3. Serve React Frontend in Production (Using 'foodapp' folder)
+app.use(express.static(path.join(__dirname, '../foodapp/build')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, '../foodapp', 'build', 'index.html'));
 });
 
 // 4. Start Server with '0.0.0.0' for local network binding
