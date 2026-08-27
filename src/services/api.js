@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Pointing directly to your live Render backend URL
+// Pointing to the relative /api path since frontend and backend share the same domain
 const API = axios.create({
-  baseURL: 'https://food-delivery-app-project-vqx3.onrender.com/api',
+  baseURL: '/api',
 });
 
 // Automatically attach authorization token if available in localStorage

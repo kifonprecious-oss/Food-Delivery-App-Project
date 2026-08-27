@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -29,9 +30,11 @@ app.use('/api/menu', menuRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/auth', authRoutes);
 
-// 3. Define a Simple Test Route
-app.get('/', (req, res) => {
-  res.send('Bites By Splashy Empire backend is running live!');
+// 3. Serve React Frontend in Production (Using 'build' for Create React App)
+app.use(express.static(path.join(__dirname, '../frontend/build')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../frontend', 'build', 'index.html'));
 });
 
 // 4. Start Server with '0.0.0.0' for local network binding
